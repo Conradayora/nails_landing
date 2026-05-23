@@ -179,6 +179,7 @@ const galleryActions = document.querySelector(".gallery-actions");
 const colorCards = document.querySelectorAll(".color-card");
 const colorToggle = document.querySelector("#color-toggle");
 const colorActions = document.querySelector(".color-actions");
+const contactForm = document.querySelector(".contact-form");
 const carouselRoots = document.querySelectorAll(".js-carousel");
 const lightbox = document.querySelector(".lightbox");
 const lightboxImage = document.querySelector(".lightbox img");
@@ -191,7 +192,8 @@ const navLinks = document.querySelector(".nav-links");
 const topbar = document.querySelector(".topbar");
 
 const initialGalleryLimit = 9;
-const initialColorLimit = 12;
+const desktopInitialColorLimit = 12;
+const mobileInitialColorLimit = 6;
 let activeFilter = "all";
 let activeSubfilter = "all";
 let galleryExpanded = false;
@@ -252,7 +254,13 @@ function applyFilters() {
     galleryToggle.textContent = galleryExpanded ? "Ver menos" : "Ver más";
 }
 
+function getInitialColorLimit() {
+    return window.matchMedia("(max-width: 720px)").matches ? mobileInitialColorLimit : desktopInitialColorLimit;
+}
+
 function applyColorLimit() {
+    const initialColorLimit = getInitialColorLimit();
+
     colorCards.forEach((card, index) => {
         const shouldHide = !colorsExpanded && index >= initialColorLimit;
         card.classList.toggle("is-hidden", shouldHide);
@@ -310,6 +318,23 @@ colorToggle.addEventListener("click", () => {
     colorsExpanded = !colorsExpanded;
     applyColorLimit();
 });
+
+if (contactForm) {
+    contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(contactForm);
+        const body = [
+            `Nombre: ${formData.get("name") || ""}`,
+            `Email: ${formData.get("email") || ""}`,
+            `Tipo de uñas: ${formData.get("service") || ""}`,
+            "",
+            `Mensaje: ${formData.get("message") || ""}`
+        ].join("\n");
+
+        window.location.href = `mailto:bijutsu.nails.shop@gmail.com?subject=${encodeURIComponent("Consulta desde Xufeta Nails Art")}&body=${encodeURIComponent(body)}`;
+    });
+}
 
 function openLightbox(index) {
     if (!filteredImages.length) {
@@ -373,12 +398,14 @@ document.addEventListener("keydown", (event) => {
 
 menuToggle.addEventListener("click", () => {
     const isOpen = navLinks.classList.toggle("is-open");
+    topbar.classList.toggle("menu-open", isOpen);
     menuToggle.setAttribute("aria-expanded", String(isOpen));
 });
 
 navLinks.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
         navLinks.classList.remove("is-open");
+        topbar.classList.remove("menu-open");
         menuToggle.setAttribute("aria-expanded", "false");
     });
 });
@@ -389,6 +416,7 @@ function updateTopbarState() {
 
 window.addEventListener("scroll", updateTopbarState, { passive: true });
 updateTopbarState();
+window.addEventListener("resize", applyColorLimit);
 
 function getSlidesPerView() {
     if (window.matchMedia("(max-width: 720px)").matches) {
