@@ -16,137 +16,39 @@ const subcategoryLabels = {
     animal_print: "Animal print"
 };
 
-const fileTitleLabels = {
-    color_black: "Full color negro",
-    color_blue: "Full color azul",
-    color_brown: "Full color marron",
-    color_full_pink: "Full color rosa intenso",
-    color_green: "Full color verde",
-    color_love: "Full color love",
-    color_pink: "Full color rosa",
-    color_purple: "Full color morado",
-    color_purple_2: "Full color morado 2",
-    color_red: "Full color rojo",
-    color_red_2: "Full color rojo 2",
-    color_sky: "Full color sky",
-    color_warm: "Full color calido",
-    colo_luxury: "Full color luxury",
-    puntos: "Puntos",
-    puntos_black: "Puntos negro",
-    puntos_blue: "Puntos azul",
-    puntos_green: "Puntos verde",
-    purpurina: "Purpurina",
-    gemas: "Gemas",
-    animal_print: "Animal print",
-    blooming: "Blooming",
-    baby_boomer: "Baby boomer",
-    ilustration: "Ilustracion"
-};
-
 const makeItem = (src, category, subcategory = "") => ({
     src,
     category,
-    subcategory,
-    title: buildTitle(src, category, subcategory)
+    subcategory
 });
 
-function buildTitle(src, category, subcategory) {
-    const file = src.split("/").pop().replace(".webp", "");
-    const number = file.match(/_(\d+)$/)?.[1];
-    const base = subcategory ? subcategoryLabels[subcategory] : categoryLabels[category];
-    const fileBase = file.replace(/_\d+$/, "");
-
-    if (file === "press_on_") {
-        return "Press on destacado";
-    }
-
-    if (fileTitleLabels[file]) {
-        return fileTitleLabels[file];
-    }
-
-    if (fileTitleLabels[fileBase] && number) {
-        return `${fileTitleLabels[fileBase]} ${number}`;
-    }
-
-    return number ? `${base} ${number}` : base;
-}
+const range = (prefix, start, end) => Array.from({ length: end - start + 1 }, (_, index) => `${prefix}_${start + index}`);
+const makeItems = (base, category, subcategory, files) => files.map((file) => makeItem(`imagenes/${base}/${file}.webp`, category, subcategory));
+const searchAliases = {
+    black: "negro",
+    blue: "azul",
+    brown: "marron",
+    full_pink: "rosa",
+    green: "verde",
+    pink: "rosa",
+    purple: "morado",
+    red: "rojo",
+    warm: "calido",
+    luxury: "lujo"
+};
 
 const galleryImages = [
-    makeItem("imagenes/francesa/francesa_1.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_2.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_3.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_4.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_5.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_6.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_7.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_8.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_9.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_10.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_11.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_12.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_13.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_14.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_15.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_16.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_17.webp", "francesa"),
-    makeItem("imagenes/francesa/francesa_18.webp", "francesa"),
-    makeItem("imagenes/baby_boomer/baby_boomer.webp", "baby_boomer"),
-    makeItem("imagenes/baby_boomer/baby_boomer_2.webp", "baby_boomer"),
-    makeItem("imagenes/baby_boomer/baby_boomer_3.webp", "baby_boomer"),
-    makeItem("imagenes/baby_boomer/baby_boomer_4.webp", "baby_boomer"),
-    makeItem("imagenes/ojo_de_gato/ojo_de_gato_2.webp", "ojo_de_gato"),
-    makeItem("imagenes/ojo_de_gato/ojo_de_gato_3.webp", "ojo_de_gato"),
-    makeItem("imagenes/ojo_de_gato/ojo_de_gato_4.webp", "ojo_de_gato"),
-    makeItem("imagenes/ojo_de_gato/ojo_de_gato_5.webp", "ojo_de_gato"),
-    makeItem("imagenes/press_on/press_on_.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_1.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_2.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_3.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_4.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_5.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_6.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_7.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_8.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_9.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_10.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_11.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_12.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_13.webp", "press_on"),
-    makeItem("imagenes/press_on/press_on_14.webp", "press_on"),
-    makeItem("imagenes/efecto_blooming/blooming.webp", "efecto_blooming"),
-    makeItem("imagenes/efecto_blooming/blooming_1.webp", "efecto_blooming"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_black.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_blue.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_brown.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_full_pink.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_green.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_love.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_pink.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_purple.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_purple_2.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_red.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_red_2.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_sky.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/color_warm.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/full_color/colo_luxury.webp", "esmaltado_colour", "full_color"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_2.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_3.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_4.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_5.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_6.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_7.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/ilustracion/ilustration_8.webp", "esmaltado_colour", "ilustracion"),
-    makeItem("imagenes/esmaltado_colour/puntos/puntos.webp", "esmaltado_colour", "puntos"),
-    makeItem("imagenes/esmaltado_colour/puntos/puntos_black.webp", "esmaltado_colour", "puntos"),
-    makeItem("imagenes/esmaltado_colour/puntos/puntos_blue.webp", "esmaltado_colour", "puntos"),
-    makeItem("imagenes/esmaltado_colour/puntos/puntos_green.webp", "esmaltado_colour", "puntos"),
-    makeItem("imagenes/esmaltado_colour/purpurina/purpurina.webp", "esmaltado_colour", "purpurina"),
-    makeItem("imagenes/esmaltado_colour/purpurina/purpurina_2.webp", "esmaltado_colour", "purpurina"),
-    makeItem("imagenes/esmaltado_colour/gemas/gemas.webp", "esmaltado_colour", "gemas"),
-    makeItem("imagenes/esmaltado_colour/gemas/gemas_2.webp", "esmaltado_colour", "gemas"),
-    makeItem("imagenes/esmaltado_colour/animal_print/animal_print.webp", "esmaltado_colour", "animal_print"),
-    makeItem("imagenes/esmaltado_colour/animal_print/animal_print_2.webp", "esmaltado_colour", "animal_print")
+    ...makeItems("francesa", "francesa", "", range("francesa", 1, 18)),
+    ...makeItems("baby_boomer", "baby_boomer", "", ["baby_boomer", ...range("baby_boomer", 2, 4)]),
+    ...makeItems("ojo_de_gato", "ojo_de_gato", "", range("ojo_de_gato", 2, 5)),
+    ...makeItems("press_on", "press_on", "", ["press_on_", ...range("press_on", 1, 14)]),
+    ...makeItems("efecto_blooming", "efecto_blooming", "", ["blooming", "blooming_1"]),
+    ...makeItems("esmaltado_colour/full_color", "esmaltado_colour", "full_color", "color_black color_blue color_brown color_full_pink color_green color_love color_pink color_purple color_purple_2 color_red color_red_2 color_sky color_warm colo_luxury".split(" ")),
+    ...makeItems("esmaltado_colour/ilustracion", "esmaltado_colour", "ilustracion", ["ilustration", ...range("ilustration", 2, 8)]),
+    ...makeItems("esmaltado_colour/puntos", "esmaltado_colour", "puntos", "puntos puntos_black puntos_blue puntos_green".split(" ")),
+    ...makeItems("esmaltado_colour/purpurina", "esmaltado_colour", "purpurina", ["purpurina", "purpurina_2"]),
+    ...makeItems("esmaltado_colour/gemas", "esmaltado_colour", "gemas", ["gemas", "gemas_2"]),
+    ...makeItems("esmaltado_colour/animal_print", "esmaltado_colour", "animal_print", ["animal_print", "animal_print_2"])
 ];
 
 const originalGalleryOrder = new Map(galleryImages.map((item, index) => [item.src, index]));
@@ -168,6 +70,40 @@ galleryImages.sort((a, b) => {
 
     return aPriority - bPriority;
 });
+
+const colorOptions = [
+    ["Rosa lechoso", "Delicado, limpio y favorecedor para manicuras naturales.", "#f4dfd9"],
+    ["Nude almendra", "Un beige rosado elegante para diario o eventos discretos.", "#d4b2a4"],
+    ["Rosa frambuesa", "Vivo, femenino y con presencia sin llegar al rojo clasico.", "#bb2f4f"],
+    ["Rojo cereza", "Intenso y brillante, perfecto para un acabado sofisticado.", "#7c1f22"],
+    ["Lila bruma", "Pastel frio para manicuras suaves con un punto diferente.", "#b9aecf"],
+    ["Azul lavanda", "Sereno, moderno y muy bonito con detalles plateados.", "#7f8ebd"],
+    ["Turquesa joya", "Color protagonista para looks frescos o de verano.", "#1aa5a0"],
+    ["Nacar irisado", "Reflejos perlados para baby boomer, francesa o detalles.", "", "chrome"],
+    ["Ojo de gato vino", "Profundo, magnetico y con destello cambiante.", "", "cat-eye"],
+    ["Confetti candy", "Puntos y microdetalles para disenos divertidos.", "", "confetti"],
+    ["Carey suave", "Patron calido tipo animal print, elegante y actual.", "", "animal"],
+    ["Champagne glitter", "Brillo fino para acentos, fiestas o manicuras luminosas.", "", "glitter"],
+    ["Algodon rosa", "Pastel dulce para manicuras suaves y delicadas.", "#f7cbd5"],
+    ["Malva empolvado", "Rosa apagado con un punto vintage muy elegante.", "#df9aa8"],
+    ["Fucsia hibisco", "Energia, color y mucho protagonismo en la mano.", "#ec4f7d"],
+    ["Marron cacao", "Profundo y calido, ideal para looks oto&ntilde;ales.", "#6f2320"],
+    ["Negro lacado", "Minimalista, potente y perfecto con brillo espejo.", "#2f2f33"],
+    ["Gris perla", "Neutro frio, limpio y facil de combinar.", "#c9c8c4"],
+    ["Verde salvia", "Suave, natural y muy bonito en manicuras cortas.", "#88bfa6"],
+    ["Verde esmeralda", "Joya intensa para dise&ntilde;os elegantes o festivos.", "#1f5f58"],
+    ["Blooming acuarela", "Efecto difuminado para flores y fondos fluidos.", "", "blooming"],
+    ["Francesa glaseada", "Base nude con punta blanca suave y brillo limpio.", "", "french"]
+];
+
+const colorGrid = document.querySelector("#color-grid");
+colorGrid.innerHTML = colorOptions.map(([name, text, swatch, pattern]) => `
+    <article class="color-card">
+        <span class="swatch${pattern ? ` pattern ${pattern}` : ""}"${swatch ? ` style="--swatch: ${swatch};"` : ""}></span>
+        <h3>${name}</h3>
+        <p>${text}</p>
+    </article>
+`).join("");
 
 const galleryGrid = document.querySelector("#gallery-grid");
 const filterButtons = document.querySelectorAll(".filter-button");
@@ -207,7 +143,7 @@ function renderGallery() {
         const label = item.subcategory ? subcategoryLabels[item.subcategory] : categoryLabels[item.category];
 
         return `
-            <figure class="gallery-item" data-category="${item.category}" data-subcategory="${item.subcategory}" data-title="${item.title.toLowerCase()}" data-label="${label.toLowerCase()}" data-index="${index}">
+            <figure class="gallery-item" data-category="${item.category}" data-subcategory="${item.subcategory}" data-label="${label.toLowerCase()}" data-index="${index}">
                 <button type="button" aria-label="Abrir ${label}">
                     <img src="${item.src}" alt="${label} de Nufeta Nails Art" loading="lazy">
                 </button>
@@ -218,16 +154,19 @@ function renderGallery() {
         `;
     }).join("");
 
-    galleryGrid.querySelectorAll(".gallery-item button").forEach((button) => {
-        button.addEventListener("click", () => {
-            const index = Number(button.closest(".gallery-item").dataset.index);
-            const filteredIndex = filteredImages.findIndex((item) => galleryImages.indexOf(item) === index);
-            openLightbox(filteredIndex >= 0 ? filteredIndex : 0);
-        });
-    });
-
     applyFilters();
 }
+
+galleryGrid.addEventListener("click", (event) => {
+    const item = event.target.closest(".gallery-item");
+    if (!item || !galleryGrid.contains(item)) {
+        return;
+    }
+
+    const index = Number(item.dataset.index);
+    const filteredIndex = filteredImages.findIndex((image) => galleryImages.indexOf(image) === index);
+    openLightbox(filteredIndex >= 0 ? filteredIndex : 0);
+});
 
 function applyFilters() {
     const searchTerm = searchInput.value.trim().toLowerCase();
@@ -236,7 +175,11 @@ function applyFilters() {
     matchingImages = galleryImages.filter((item) => {
         const categoryMatch = activeFilter === "all" || item.category === activeFilter;
         const subcategoryMatch = activeSubfilter === "all" || item.subcategory === activeSubfilter;
-        const text = `${item.title} ${categoryLabels[item.category]} ${subcategoryLabels[item.subcategory] || ""} ${item.src}`.toLowerCase();
+        const aliases = Object.entries(searchAliases)
+            .filter(([key]) => item.src.includes(key))
+            .map(([, value]) => value)
+            .join(" ");
+        const text = `${categoryLabels[item.category]} ${subcategoryLabels[item.subcategory] || ""} ${aliases} ${item.src}`.toLowerCase();
         const searchMatch = !searchTerm || text.includes(searchTerm);
 
         return categoryMatch && subcategoryMatch && searchMatch;
@@ -320,19 +263,42 @@ colorToggle.addEventListener("click", () => {
 });
 
 if (contactForm) {
-    contactForm.addEventListener("submit", (event) => {
+    const formStatus = contactForm.querySelector(".form-status");
+    const submitButton = contactForm.querySelector("button[type='submit']");
+
+    contactForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const formData = new FormData(contactForm);
-        const body = [
-            `Nombre: ${formData.get("name") || ""}`,
-            `Email: ${formData.get("email") || ""}`,
-            `Tipo de uñas: ${formData.get("service") || ""}`,
-            "",
-            `Mensaje: ${formData.get("message") || ""}`
-        ].join("\n");
+        if (!contactForm.checkValidity()) {
+            contactForm.reportValidity();
+            return;
+        }
 
-        window.location.href = `mailto:bijutsu.nails.shop@gmail.com?subject=${encodeURIComponent("Consulta desde Xufeta Nails Art")}&body=${encodeURIComponent(body)}`;
+        formStatus.textContent = "Enviando consulta...";
+        formStatus.classList.remove("is-error");
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("No se pudo enviar el formulario.");
+            }
+
+            contactForm.reset();
+            formStatus.textContent = "Consulta enviada. Te responderemos muy pronto.";
+        } catch (error) {
+            formStatus.textContent = "No se pudo enviar ahora. Prueba de nuevo en unos minutos.";
+            formStatus.classList.add("is-error");
+        } finally {
+            submitButton.disabled = false;
+        }
     });
 }
 
@@ -433,10 +399,7 @@ function getSlidesPerView() {
 function setupCarousel(root) {
     const track = root.querySelector(".carousel-track");
     const slides = root.querySelectorAll(".category-slide");
-    const prev = root.querySelector(".carousel-prev");
-    const next = root.querySelector(".carousel-next");
     let activeSlide = 0;
-    let timer;
 
     function updateCarousel() {
         const slidesPerView = getSlidesPerView();
@@ -456,44 +419,16 @@ function setupCarousel(root) {
         });
     }
 
-    function moveCarousel(direction) {
+    function moveCarousel() {
         const slidesPerView = getSlidesPerView();
         const maxSlide = Math.max(slides.length - slidesPerView, 0);
-        activeSlide = activeSlide + direction;
-
-        if (activeSlide > maxSlide) {
-            activeSlide = 0;
-        }
-
-        if (activeSlide < 0) {
-            activeSlide = maxSlide;
-        }
-
+        activeSlide = activeSlide >= maxSlide ? 0 : activeSlide + 1;
         updateCarousel();
-    }
-
-    function restartCarousel() {
-        window.clearInterval(timer);
-        timer = window.setInterval(() => moveCarousel(1), 4200);
-    }
-
-    if (prev) {
-        prev.addEventListener("click", () => {
-            moveCarousel(-1);
-            restartCarousel();
-        });
-    }
-
-    if (next) {
-        next.addEventListener("click", () => {
-            moveCarousel(1);
-            restartCarousel();
-        });
     }
 
     window.addEventListener("resize", updateCarousel);
     updateCarousel();
-    restartCarousel();
+    window.setInterval(moveCarousel, 4200);
 }
 
 renderGallery();
