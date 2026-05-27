@@ -256,12 +256,12 @@ h3 {
 .section {
     width: min(1180px, calc(100% - 40px));
     margin: 0 auto;
-    padding: 92px 0;
+    padding: clamp(104px, 11vw, 148px) 0;
 }
 
 .section-heading {
     max-width: 780px;
-    margin-bottom: 28px;
+    margin-bottom: 36px;
 }
 
 .section-heading p,
@@ -270,6 +270,7 @@ h3 {
 .gallery-meta,
 .experience-copy p,
 .process-list p,
+.faq-item p,
 .clients-section p,
 .contact-copy p,
 .site-footer {
@@ -299,6 +300,7 @@ h3 {
     border-radius: 8px;
     background: var(--surface);
     box-shadow: 0 10px 28px rgba(75, 48, 43, 0.08);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
 }
 
 .services-grid article,
@@ -316,7 +318,8 @@ h3 {
 }
 
 .category-showcase {
-    padding: 0 0 72px;
+    padding-top: 48px;
+    padding-bottom: 118px;
 }
 
 .carousel-viewport {
@@ -341,7 +344,8 @@ h3 {
     border-radius: 16px;
     object-fit: cover;
     transform: scale(0.985);
-    transition: transform 0.35s ease;
+    box-shadow: 0 10px 24px rgba(75, 48, 43, 0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
 .category-slide.is-active {
@@ -350,10 +354,11 @@ h3 {
 
 .category-slide:hover {
     transform: scale(1.055);
+    box-shadow: 0 18px 34px rgba(75, 48, 43, 0.16);
 }
 
 .color-guide {
-    padding-top: 24px;
+    padding-top: 72px;
 }
 
 .color-grid {
@@ -455,7 +460,7 @@ h3 {
 }
 
 .press-on-showcase {
-    padding-top: 24px;
+    padding-top: 72px;
 }
 
 .press-on-slide {
@@ -484,12 +489,13 @@ h3 {
 .filter-button,
 .subfilter-button {
     flex: 1 1 150px;
-    min-height: 40px;
+    min-height: 38px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 0 14px;
+    padding: 0 12px;
     color: var(--ink);
     background: #fffdfb;
+    font-size: 0.86rem;
     font-weight: 700;
     cursor: pointer;
 }
@@ -537,16 +543,16 @@ h3 {
 }
 
 .gallery-grid {
-    column-count: 3;
-    column-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
 }
 
 .gallery-item {
-    display: inline-block;
     width: 100%;
-    margin: 0 0 20px;
+    margin: 0;
     overflow: hidden;
-    break-inside: avoid;
 }
 
 .gallery-item button {
@@ -580,7 +586,7 @@ h3 {
 }
 
 .clients-section {
-    padding-top: 24px;
+    padding-top: 72px;
 }
 
 .clients-grid {
@@ -615,16 +621,18 @@ h3 {
     font-weight: 700;
 }
 
-.experience-section,
-.contact-section {
+.experience-section {
     display: grid;
-    grid-template-columns: 0.72fr 0.88fr 1.1fr;
-    gap: 52px;
+    grid-template-columns: minmax(260px, 0.74fr) minmax(0, 1.26fr);
+    gap: clamp(36px, 6vw, 72px);
     align-items: start;
 }
 
 .contact-section {
+    display: grid;
     grid-template-columns: 0.9fr 1.1fr;
+    gap: 52px;
+    align-items: start;
 }
 
 .experience-media {
@@ -636,16 +644,22 @@ h3 {
     border-radius: 8px;
     background: var(--surface);
     box-shadow: var(--shadow);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
 }
 
 .experience-media img {
     width: 100%;
-    aspect-ratio: 3 / 4.4;
+    height: min(640px, calc(100svh - 140px));
+    min-height: 420px;
     object-fit: cover;
     object-position: center top;
 }
 
-.experience-copy,
+.experience-story {
+    display: grid;
+    gap: 34px;
+}
+
 .contact-copy {
     position: sticky;
     top: 110px;
@@ -663,10 +677,57 @@ h3 {
     gap: 14px;
 }
 
+.experience-timeline {
+    --timeline-dot: 18px;
+    --timeline-axis: calc(var(--timeline-dot) / 2);
+    --timeline-gutter: 48px;
+    position: relative;
+    gap: 0;
+    padding-left: 0;
+}
+
+.experience-timeline::before {
+    position: absolute;
+    top: 8px;
+    bottom: 12px;
+    left: var(--timeline-axis);
+    width: 2px;
+    background: linear-gradient(180deg, var(--rose), var(--line));
+    transform: translateX(-50%);
+    content: "";
+}
+
+.experience-timeline article {
+    position: relative;
+    border: 0;
+    border-radius: 0;
+    padding: 0 0 34px var(--timeline-gutter);
+    background: transparent;
+    box-shadow: none;
+}
+
+.experience-timeline article::before {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    width: var(--timeline-dot);
+    height: var(--timeline-dot);
+    border: 4px solid var(--bg);
+    border-radius: 50%;
+    background: var(--rose);
+    box-shadow: 0 0 0 1px var(--line);
+    content: "";
+}
+
+.experience-timeline article:last-child {
+    padding-bottom: 0;
+}
+
 .process-list span {
     display: inline-block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: var(--rose-dark);
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -674,6 +735,30 @@ h3 {
 .process-list h3 {
     margin-bottom: 8px;
     font-size: 1.08rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .services-grid article:hover,
+    .color-card:hover,
+    .gallery-item:hover,
+    .client-card:hover,
+    .faq-item:hover,
+    .contact-form:hover,
+    .experience-media:hover {
+        border-color: rgba(201, 120, 130, 0.42);
+        box-shadow: 0 18px 38px rgba(75, 48, 43, 0.13);
+        transform: translateY(-4px);
+    }
+}
+
+@media (min-width: 981px) {
+    .experience-timeline article {
+        padding-bottom: 54px;
+    }
+
+    .experience-timeline article:last-child {
+        padding-bottom: 0;
+    }
 }
 
 .contact-form {
@@ -707,6 +792,64 @@ h3 {
     background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%;
     background-repeat: no-repeat;
     background-size: 6px 6px, 6px 6px;
+}
+
+.faq-section {
+    padding-top: 64px;
+}
+
+.faq-list {
+    display: grid;
+    gap: 14px;
+    max-width: 920px;
+}
+
+.faq-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 10px 28px rgba(75, 48, 43, 0.08);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.faq-item summary {
+    position: relative;
+    display: block;
+    padding: 22px 58px 22px 24px;
+    color: var(--ink);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item summary::after {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--rose-dark);
+    border-bottom: 2px solid var(--rose-dark);
+    transform: translateY(-65%) rotate(45deg);
+    transition: transform 0.2s ease;
+    content: "";
+}
+
+.faq-item[open] summary::after {
+    transform: translateY(-35%) rotate(225deg);
+}
+
+.faq-item p {
+    margin: 0;
+    padding: 0 24px 20px;
+}
+
+.faq-item p + p {
+    padding-top: 0;
 }
 
 .contact-form textarea {
@@ -866,7 +1009,6 @@ h3 {
 
     .hero,
     .services-section,
-    .experience-section,
     .contact-section {
         grid-template-columns: 1fr;
     }
@@ -905,11 +1047,19 @@ h3 {
     }
 
     .gallery-grid {
-        column-count: 2;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .experience-media,
-    .experience-copy,
+    .experience-section {
+        grid-template-columns: minmax(220px, 0.74fr) minmax(0, 1.26fr);
+        gap: 34px;
+    }
+
+    .experience-media img {
+        height: min(560px, calc(100svh - 124px));
+        min-height: 360px;
+    }
+
     .contact-copy {
         position: static;
     }
@@ -960,7 +1110,11 @@ h3 {
     }
 
     .section {
-        padding: 66px 0;
+        padding: 86px 0;
+    }
+
+    .section-heading {
+        margin-bottom: 28px;
     }
 
     .services-grid {
@@ -968,7 +1122,8 @@ h3 {
     }
 
     .carousel-track {
-        --slide-width: 100%;
+        --gap: 14px;
+        --slide-width: 82%;
     }
 
     .color-grid {
@@ -1017,7 +1172,48 @@ h3 {
     }
 
     .gallery-grid {
-        column-count: 1;
+        grid-template-columns: 1fr;
+    }
+
+    .experience-section {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .experience-media {
+        position: static;
+    }
+
+    .experience-media img {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 3 / 3.8;
+    }
+
+    .experience-timeline {
+        --timeline-dot: 16px;
+        --timeline-gutter: 36px;
+    }
+
+    .experience-timeline article {
+        padding-bottom: 30px;
+    }
+
+    .faq-section {
+        padding-top: 52px;
+    }
+
+    .faq-item summary {
+        padding: 18px 50px 18px 18px;
+    }
+
+    .faq-item summary::after {
+        right: 20px;
+    }
+
+    .faq-item p {
+        padding-right: 18px;
+        padding-left: 18px;
     }
 
     .lightbox {

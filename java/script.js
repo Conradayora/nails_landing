@@ -138,14 +138,15 @@ let matchingImages = [...galleryImages];
 let filteredImages = galleryImages.slice(0, initialGalleryLimit);
 let activeImageIndex = 0;
 
-function renderGallery() {
-    galleryGrid.innerHTML = galleryImages.map((item, index) => {
+function renderGallery(items) {
+    galleryGrid.innerHTML = items.map((item) => {
+        const index = galleryImages.indexOf(item);
         const label = item.subcategory ? subcategoryLabels[item.subcategory] : categoryLabels[item.category];
 
         return `
             <figure class="gallery-item" data-category="${item.category}" data-subcategory="${item.subcategory}" data-label="${label.toLowerCase()}" data-index="${index}">
                 <button type="button" aria-label="Abrir ${label}">
-                    <img src="${item.src}" alt="${label} de Nufeta Nails Art" loading="lazy">
+                    <img src="${item.src}" alt="${label} de Xufeta Nails Art" loading="lazy">
                 </button>
                 <figcaption>
                     <h3>${label}</h3>
@@ -153,8 +154,6 @@ function renderGallery() {
             </figure>
         `;
     }).join("");
-
-    applyFilters();
 }
 
 galleryGrid.addEventListener("click", (event) => {
@@ -170,7 +169,6 @@ galleryGrid.addEventListener("click", (event) => {
 
 function applyFilters() {
     const searchTerm = searchInput.value.trim().toLowerCase();
-    const items = galleryGrid.querySelectorAll(".gallery-item");
 
     matchingImages = galleryImages.filter((item) => {
         const categoryMatch = activeFilter === "all" || item.category === activeFilter;
@@ -186,11 +184,7 @@ function applyFilters() {
     });
 
     filteredImages = galleryExpanded ? matchingImages : matchingImages.slice(0, initialGalleryLimit);
-
-    items.forEach((item) => {
-        const galleryItem = galleryImages[Number(item.dataset.index)];
-        item.classList.toggle("is-hidden", !filteredImages.includes(galleryItem));
-    });
+    renderGallery(filteredImages);
 
     visibleCount.textContent = filteredImages.length;
     galleryActions.classList.toggle("is-hidden", matchingImages.length <= initialGalleryLimit);
@@ -325,7 +319,7 @@ function updateLightbox() {
     const label = item.subcategory ? subcategoryLabels[item.subcategory] : categoryLabels[item.category];
 
     lightboxImage.src = item.src;
-    lightboxImage.alt = `${label} de Nufeta Nails Art`;
+    lightboxImage.alt = `${label} de Xufeta Nails Art`;
     lightboxCaption.textContent = label;
 }
 
@@ -398,12 +392,29 @@ function getSlidesPerView() {
 
 function setupCarousel(root) {
     const track = root.querySelector(".carousel-track");
-    const slides = root.querySelectorAll(".category-slide");
+    const viewport = root.querySelector(".carousel-viewport");
+    const originalSlides = Array.from(root.querySelectorAll(".category-slide"));
+    let slides = originalSlides;
     let activeSlide = 0;
+
+    if (originalSlides.length > 1) {
+        originalSlides.forEach((slide, index) => {
+            slide.dataset.carouselIndex = index;
+        });
+
+        const firstClone = originalSlides[0].cloneNode(true);
+        const lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+        firstClone.dataset.carouselIndex = "0";
+        lastClone.dataset.carouselIndex = String(originalSlides.length - 1);
+        track.prepend(lastClone);
+        track.append(firstClone);
+        slides = Array.from(track.querySelectorAll(".category-slide"));
+    }
 
     function updateCarousel() {
         const slidesPerView = getSlidesPerView();
-        const maxSlide = Math.max(slides.length - slidesPerView, 0);
+        const isMobilePeek = window.matchMedia("(max-width: 720px)").matches;
+        const maxSlide = isMobilePeek ? Math.max(originalSlides.length - 1, 0) : Math.max(originalSlides.length - slidesPerView, 0);
         activeSlide = Math.min(activeSlide, maxSlide);
 
         if (!slides.length) {
@@ -412,16 +423,22 @@ function setupCarousel(root) {
 
         const slideWidth = slides[0].getBoundingClientRect().width;
         const gap = Number.parseFloat(getComputedStyle(track).gap) || 0;
-        track.style.transform = `translateX(-${activeSlide * (slideWidth + gap)}px)`;
+        const cloneOffset = originalSlides.length > 1 ? 1 : 0;
+        const activeTrackSlide = activeSlide + cloneOffset;
+        const centeredOffset = isMobilePeek ? (viewport.clientWidth - slideWidth) / 2 : 0;
+        const offset = activeTrackSlide * (slideWidth + gap) - centeredOffset;
+        track.style.transform = `translateX(-${offset}px)`;
 
         slides.forEach((slide, index) => {
-            slide.classList.toggle("is-active", index === activeSlide);
+            const slideIndex = Number.parseInt(slide.dataset.carouselIndex || index, 10);
+            slide.classList.toggle("is-active", slideIndex === activeSlide);
         });
     }
 
     function moveCarousel() {
         const slidesPerView = getSlidesPerView();
-        const maxSlide = Math.max(slides.length - slidesPerView, 0);
+        const isMobilePeek = window.matchMedia("(max-width: 720px)").matches;
+        const maxSlide = isMobilePeek ? Math.max(originalSlides.length - 1, 0) : Math.max(originalSlides.length - slidesPerView, 0);
         activeSlide = activeSlide >= maxSlide ? 0 : activeSlide + 1;
         updateCarousel();
     }
@@ -431,6 +448,6 @@ function setupCarousel(root) {
     window.setInterval(moveCarousel, 4200);
 }
 
-renderGallery();
+applyFilters();
 applyColorLimit();
 carouselRoots.forEach(setupCarousel);
