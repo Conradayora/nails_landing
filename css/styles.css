@@ -454,7 +454,6 @@ h3 {
 
 .color-card.is-hidden,
 .color-actions.is-hidden,
-.gallery-item.is-hidden,
 .gallery-actions.is-hidden {
     display: none;
 }

@@ -144,7 +144,7 @@ function renderGallery(items) {
         const label = item.subcategory ? subcategoryLabels[item.subcategory] : categoryLabels[item.category];
 
         return `
-            <figure class="gallery-item" data-category="${item.category}" data-subcategory="${item.subcategory}" data-label="${label.toLowerCase()}" data-index="${index}">
+            <figure class="gallery-item" data-index="${index}">
                 <button type="button" aria-label="Abrir ${label}">
                     <img src="${item.src}" alt="${label} de Xufeta Nails Art" loading="lazy">
                 </button>
